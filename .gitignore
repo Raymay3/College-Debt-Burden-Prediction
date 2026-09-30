@@ -1,0 +1,14 @@
+# macOS metadata
+__MACOSX/
+.DS_Store
+._*
+
+# Raw CSVs are too large for GitHub; commit the .csv.gz versions instead
+*.csv
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
