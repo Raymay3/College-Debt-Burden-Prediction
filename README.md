@@ -1,6 +1,6 @@
 # College Debt Burden Prediction
 
-## SIADS 696 — Milestone II
+## SIADS 696 - Milestone II
 
 **Team 15**
 
@@ -167,9 +167,9 @@ Model development is performed using cross-validation on the training data.
 
 Primary evaluation metrics include:
 
-- **RMSE** — Root Mean Squared Error
-- **MAE** — Mean Absolute Error
-- **R²** — Coefficient of Determination
+- **RMSE** - Root Mean Squared Error
+- **MAE** - Mean Absolute Error
+- **R²** - Coefficient of Determination
 
 Model interpretation and diagnostic analyses may include:
 
@@ -277,8 +277,6 @@ Some directories and later notebooks may be populated as the project progresses.
 
 ### `01_data_preparation.ipynb`
 
-**Primary owner: Gabriella**
-
 Creates the common modeling dataset used throughout the project.
 
 Major tasks include:
@@ -301,8 +299,6 @@ Major tasks include:
 
 ### `02_supervised_learning.ipynb`
 
-**Primary owner: Vamsi**
-
 Develops and compares supervised regression models.
 
 Major tasks include:
@@ -322,8 +318,6 @@ Major tasks include:
 
 ### `03_unsupervised_learning.ipynb`
 
-**Primary owner: Dominick**
-
 Examines the structure of institutions without using debt burden to form the groups.
 
 Major tasks include:
@@ -342,8 +336,6 @@ Major tasks include:
 
 ### `04_integration.ipynb`
 
-**Primary owners: Vamsi + Dominick**
-
 Connects the supervised and unsupervised analyses.
 
 The notebook tests whether institution structure discovered through unsupervised learning improves debt-burden prediction.
@@ -351,8 +343,6 @@ The notebook tests whether institution structure discovered through unsupervised
 **Output:** comparison of the best supervised model with and without unsupervised-derived features.
 
 ### `05_final_evaluation.ipynb`
-
-**Owners: All team members**
 
 Performs final evaluation after the modeling decisions have been made using training-data cross-validation.
 
@@ -460,4 +450,4 @@ The project primarily uses:
 
 ## Course
 
-This project was developed for **SIADS 696 — Milestone II** in the University of Michigan Master of Applied Data Science program.
+This project was developed for **SIADS 696 - Milestone II** in the University of Michigan Master of Applied Data Science program.
