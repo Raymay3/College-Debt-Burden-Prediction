@@ -6,3 +6,4 @@ seaborn
 lightgbm
 shap
 jupyter
+umap-learn

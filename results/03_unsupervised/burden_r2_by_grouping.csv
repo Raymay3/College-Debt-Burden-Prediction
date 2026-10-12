@@ -1,0 +1,8 @@
+,groups,in_sample_r2
+Sector,3,0.11670536501717221
+Predominant degree,4,0.16715071388132874
+Clusters,4,0.23608795972104013
+Sector + degree,10,0.24767805913970198
+Sector x degree,10,0.25798010707793106
+Sector + clusters,12,0.26234751348008034
+Sector x degree + clusters,30,0.28347133985539696
