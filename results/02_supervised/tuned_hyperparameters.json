@@ -1,0 +1,26 @@
+{
+  "LightGBM": {
+    "colsample_bytree": 0.4305629572798979,
+    "learning_rate": 0.0056496258399535565,
+    "min_child_samples": 29,
+    "n_estimators": 963,
+    "num_leaves": 39,
+    "reg_lambda": 0.001186494478357996,
+    "subsample": 0.7560465291496405
+  },
+  "Ridge": {
+    "alpha": 25.11886431509582
+  },
+  "Lasso": {
+    "alpha": 0.001
+  },
+  "Elastic Net": {
+    "alpha": 0.001,
+    "l1_ratio": 0.9
+  },
+  "Random Forest": {
+    "min_samples_leaf": 1,
+    "max_features": 0.33,
+    "max_depth": null
+  }
+}

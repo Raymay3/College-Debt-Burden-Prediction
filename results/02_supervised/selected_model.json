@@ -1,0 +1,80 @@
+{
+  "model": "LightGBM",
+  "hyperparameters": {
+    "colsample_bytree": 0.4305629572798979,
+    "learning_rate": 0.0056496258399535565,
+    "min_child_samples": 29,
+    "n_estimators": 963,
+    "num_leaves": 39,
+    "reg_lambda": 0.001186494478357996,
+    "subsample": 0.7560465291496405
+  },
+  "features": [
+    "CONTROL",
+    "REGION",
+    "PREDDEG",
+    "HIGHDEG",
+    "NUMBRANCH",
+    "UGDS",
+    "UGDS_WHITE",
+    "UGDS_BLACK",
+    "UGDS_HISP",
+    "UGDS_ASIAN",
+    "UGDS_AIAN",
+    "UGDS_NHPI",
+    "UGDS_2MOR",
+    "UGDS_NRA",
+    "UGDS_UNKN",
+    "PPTUG_EF",
+    "PCTPELL",
+    "PCTFLOAN",
+    "ADM_RATE",
+    "SAT_AVG",
+    "TUITIONFEE_IN",
+    "TUITIONFEE_OUT",
+    "NET_PRICE",
+    "COST_OF_ATTENDANCE",
+    "COST_IS_ACADEMIC_YEAR",
+    "NUM_PROGRAMS",
+    "NUM_CREDENTIAL_LEVELS",
+    "HAS_CERTIFICATE",
+    "HAS_ASSOCIATE",
+    "HAS_BACHELOR",
+    "HAS_POSTBACC_CERT",
+    "HAS_MASTER",
+    "HAS_DOCTORAL",
+    "HAS_FIRST_PROFESSIONAL",
+    "HAS_GRAD_CERT"
+  ],
+  "categorical_features": [
+    "CONTROL",
+    "REGION",
+    "PREDDEG",
+    "HIGHDEG"
+  ],
+  "log_features": [
+    "TUITIONFEE_IN",
+    "TUITIONFEE_OUT",
+    "NET_PRICE",
+    "COST_OF_ATTENDANCE",
+    "UGDS",
+    "NUMBRANCH",
+    "NUM_PROGRAMS"
+  ],
+  "target": "debt_burden",
+  "cv": {
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 42,
+    "fold_file": "results/02_supervised/cv_folds.csv"
+  },
+  "nested_cv_rmse_mean": 0.2741,
+  "nested_cv_rmse_std": 0.0068,
+  "nested_cv_mae_mean": 0.1998,
+  "nested_cv_r2_mean": 0.5771,
+  "baseline_rmse": {
+    "Mean baseline": 0.4219,
+    "Sector baseline": 0.3965,
+    "Sector \u00d7 degree baseline": 0.365
+  }
+}
