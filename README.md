@@ -28,6 +28,11 @@ The project compared mean and sector-based baselines, Ridge, Lasso, Elastic Net,
 
 The bootstrap intervals resample held-out institutions with the trained model fixed; they do not capture model-training or future-cohort uncertainty.
 
+**Robustness checks** (training-set cross-validation):
+
+- **Feature set:** removing the strongest predictor, federal-loan participation (`PCTFLOAN`), raises RMSE by only 0.004 (R² 0.583 → 0.571), so the results do not depend on the feature most closely related to the debt outcome. Removing sector or the sparse admissions variables has a similarly small effect.
+- **Target definition:** the proposal's alternative target, annual payment ÷ earnings, turned out to be the main target shifted by a constant (the Scorecard computes payments with one fixed amortization factor), so it gives identical results. Under two definitions that genuinely differ, all-borrower debt ÷ 10-year earnings and completer debt ÷ 6-year earnings, LightGBM remains the best model (R² 0.57–0.59).
+
 ### Institutional clusters
 
 The unsupervised workflow compared **k-means**, **Gaussian mixture models**, and **Ward agglomerative clustering** after feature preprocessing and PCA. A stable **four-cluster k-means** solution was selected, describing:
@@ -68,6 +73,8 @@ debt_burden = log(GRAD_DEBT_MDN / MD_EARN_WNE_P10)
 
 Predictors use historical institution characteristics, including sector, enrollment, student composition, aid participation, tuition, cost, admissions, and program offerings. The target components, target itself, and identifier are **excluded from model features**. Fitted transformations are learned on training data only.
 
+The full **leakage exclusion list** is saved in [`data/leakage_exclusion_list.csv`](data/leakage_exclusion_list.csv). Built from the Scorecard data dictionary, it excludes every debt, earnings, repayment/default, and completion variable (2,739 variables) and records the loan-participation rates that were reviewed and allowed, such as `PCTFLOAN`, with the reason.
+
 ### Modeling sample
 
 | Dataset | Institutions | Share |
@@ -83,7 +90,8 @@ The held-out test set was reserved for the final frozen-model evaluation, not mo
 ```text
 College-Debt-Burden-Prediction/
 ├── data/
-│   ├── raw/                         # College Scorecard bulk download (local source files)
+│   ├── raw/                         # College Scorecard bulk snapshot (CSVs stored as .csv.gz)
+│   ├── leakage_exclusion_list.csv   # Variables excluded as outcome leakage
 │   └── processed/
 │       ├── modeling_dataset.csv
 │       ├── train_dataset.csv
@@ -114,7 +122,7 @@ College-Debt-Burden-Prediction/
 └── README.md
 ```
 
-Generated artifacts include model-comparison tables, clustering diagnostics, integration decisions, held-out predictions, subgroup metrics, bootstrap intervals, and figures. Some generated files or raw data may be excluded from Git tracking; check `.gitignore` and the repository contents.
+Generated artifacts include model-comparison tables, clustering diagnostics, integration decisions, held-out predictions, subgroup metrics, bootstrap intervals, and figures. The raw CSVs are stored gzip-compressed (`.csv.gz`) to stay within GitHub's file-size limit; pandas reads them directly.
 
 ## Notebook Workflow
 
@@ -128,23 +136,18 @@ Generated artifacts include model-comparison tables, clustering diagnostics, int
 
 ## Setup and Reproduction
 
-1. Clone this repository and open it in a Python/Jupyter environment.
-2. Install dependencies:
+1. Clone this repository and open it in a Python/Jupyter environment. The analysis was run with **Python 3.13**.
+2. Install the pinned dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Obtain the College Scorecard bulk data from the source above. For complete regeneration from raw files, place the extracted files under the raw-data directory expected by `01_data_preparation.ipynb`:
-
-   ```text
-   data/raw/College_Scorecard_Raw_Data_06032026/
-   ```
-
+3. No separate data download is needed. The College Scorecard snapshot used by the project is included in the repository under `data/raw/College_Scorecard_Raw_Data_06032026/`, with each CSV stored as `.csv.gz`. The notebooks read the compressed files directly.
 4. Open Jupyter from the `notebooks/` directory (the notebooks use `Path("..")` to locate the project root).
-5. Execute notebooks in order: **01 → 02 and 03 → 04 → 05**. Notebooks 02 and 03 can run independently after Notebook 01.
+5. Execute notebooks in order: **01 → 02 and 03 → 04 → 05**. Notebooks 02 and 03 can run independently after Notebook 01. Notebook 02 takes about five minutes because of nested cross-validation.
 
-If you only need to inspect the prepared data and saved results, start with `data/processed/`, `results/`, and `figures/`. Reproducing the entire analysis requires compatible package versions and access to the raw source files.
+If you only need to inspect the prepared data and saved results, start with `data/processed/`, `results/`, and `figures/`.
 
 ## Tools
 
