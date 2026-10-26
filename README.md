@@ -148,7 +148,7 @@ If you only need to inspect the prepared data and saved results, start with `dat
 
 ## Tools
 
-Python, pandas, NumPy, scikit-learn, LightGBM, SciPy, Matplotlib, seaborn, SHAP, PCA, k-means, Gaussian mixtures, Ward clustering, Jupyter, and Git/GitHub.
+Python, pandas, NumPy, scikit-learn, LightGBM, SciPy, Matplotlib, seaborn, SHAP, PCA, UMAP, k-means, Gaussian mixtures, Ward clustering, Jupyter, and Git/GitHub.
 
 ## Interpretation
 
