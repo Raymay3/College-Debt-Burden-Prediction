@@ -19,8 +19,8 @@
     "l1_ratio": 0.9
   },
   "Random Forest": {
-    "min_samples_leaf": 1,
+    "min_samples_leaf": 2,
     "max_features": 0.33,
-    "max_depth": null
+    "max_depth": 20
   }
 }
