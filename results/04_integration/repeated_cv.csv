@@ -1,0 +1,51 @@
+repeat,fold,model,rmse
+0,0,LightGBM (supervised only),0.26826138506953634
+0,1,LightGBM (supervised only),0.27813960643049623
+0,2,LightGBM (supervised only),0.2631632282099281
+0,3,LightGBM (supervised only),0.27669673028858466
+0,4,LightGBM (supervised only),0.26574086877954706
+0,0,LightGBM + clusters (k = 4),0.26870592628023343
+0,1,LightGBM + clusters (k = 4),0.27987299293993034
+0,2,LightGBM + clusters (k = 4),0.2644935212899823
+0,3,LightGBM + clusters (k = 4),0.27391826775418476
+0,4,LightGBM + clusters (k = 4),0.2639995297214235
+1,0,LightGBM (supervised only),0.26628864883493997
+1,1,LightGBM (supervised only),0.2902048399381097
+1,2,LightGBM (supervised only),0.2584079851339275
+1,3,LightGBM (supervised only),0.2623988456749268
+1,4,LightGBM (supervised only),0.2829546996730257
+1,0,LightGBM + clusters (k = 4),0.26730553341351504
+1,1,LightGBM + clusters (k = 4),0.2906610322984663
+1,2,LightGBM + clusters (k = 4),0.256470617273403
+1,3,LightGBM + clusters (k = 4),0.2642828999268302
+1,4,LightGBM + clusters (k = 4),0.2832512532947421
+2,0,LightGBM (supervised only),0.26257044613948294
+2,1,LightGBM (supervised only),0.274661705160045
+2,2,LightGBM (supervised only),0.2897316677075375
+2,3,LightGBM (supervised only),0.2557488152000223
+2,4,LightGBM (supervised only),0.2710101650937612
+2,0,LightGBM + clusters (k = 4),0.26236016343359303
+2,1,LightGBM + clusters (k = 4),0.2727623208661034
+2,2,LightGBM + clusters (k = 4),0.2903243144138366
+2,3,LightGBM + clusters (k = 4),0.25627918329610877
+2,4,LightGBM + clusters (k = 4),0.2694058556302663
+3,0,LightGBM (supervised only),0.2887748941436137
+3,1,LightGBM (supervised only),0.2750812676789208
+3,2,LightGBM (supervised only),0.2720329486472034
+3,3,LightGBM (supervised only),0.2572196017320957
+3,4,LightGBM (supervised only),0.2680577990581099
+3,0,LightGBM + clusters (k = 4),0.288284478922208
+3,1,LightGBM + clusters (k = 4),0.27486683076762947
+3,2,LightGBM + clusters (k = 4),0.2740013224623141
+3,3,LightGBM + clusters (k = 4),0.25666413603888955
+3,4,LightGBM + clusters (k = 4),0.2693064244184677
+4,0,LightGBM (supervised only),0.27591620576398923
+4,1,LightGBM (supervised only),0.25626123408310447
+4,2,LightGBM (supervised only),0.2654250950758724
+4,3,LightGBM (supervised only),0.2782657414516485
+4,4,LightGBM (supervised only),0.28426409555616766
+4,0,LightGBM + clusters (k = 4),0.2748350314830002
+4,1,LightGBM + clusters (k = 4),0.25750334691433807
+4,2,LightGBM + clusters (k = 4),0.2659960627930006
+4,3,LightGBM + clusters (k = 4),0.2799944260462827
+4,4,LightGBM + clusters (k = 4),0.28030109914626444
