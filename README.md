@@ -1,453 +1,159 @@
 # College Debt Burden Prediction
 
-## SIADS 696 - Milestone II
+**SIADS 696 — Milestone II | University of Michigan, Master of Applied Data Science**
 
-**Team 15**
-
-- Dominick Devarti
-- Gabriella Gass
-- Vamsi Krishna Ramesh
+**Team 15:** Dominick Devarti · Gabriella Gass · Vamsi Krishna Ramesh
 
 ## Project Overview
 
-This project investigates student debt burden at the U.S. higher-education institution level using data from the **U.S. Department of Education College Scorecard**.
+Can historical characteristics of U.S. colleges predict student debt burden? And can unsupervised learning identify institution types that provide additional predictive information?
 
-The project addresses two primary questions:
+Using U.S. Department of Education **College Scorecard** data, this project combines supervised regression, principal component analysis (PCA), clustering, and leakage-aware model integration to examine these questions at the **institution level**. The analysis includes **3,296 institutions**, **35 predictors**, and a held-out test set of **660 institutions**.
 
-1. **Can an institution's student debt burden be predicted using institutional characteristics observed before student outcomes occur?**
-2. **Do U.S. higher-education institutions form meaningful groups beyond the traditional public, private nonprofit, and for-profit categories?**
+**Main result:** A LightGBM regression model achieved a held-out **RMSE of 0.2809**, **MAE of 0.1922**, and **R² of 0.5825** on log debt burden. Clustering revealed four interpretable institution types, but cluster-derived features did **not** provide a reliable improvement over the supervised model alone.
 
-To answer these questions, the project combines supervised and unsupervised machine learning. The supervised analysis predicts institution-level debt burden from historical institutional characteristics, while the unsupervised analysis examines whether institutions form meaningful data-driven groups. The final stage integrates the two approaches to test whether information discovered through clustering improves debt-burden prediction.
+## Key Findings
 
----
+### Supervised prediction
 
-## Data Source
+The project compared mean and sector-based baselines, Ridge, Lasso, Elastic Net, Random Forest, and LightGBM. Models were developed using training-only cross-validation and evaluated using RMSE (primary), MAE, and R².
 
-The project uses the **College Scorecard bulk data** published by the U.S. Department of Education.
+**LightGBM** was selected based on cross-validation. Its final performance on the untouched 20% test set was:
 
-The fixed data snapshot used for this project contains:
+| Held-out metric | Estimate | 95% bootstrap interval |
+|---|---:|---:|
+| RMSE | 0.2809 | 0.2530–0.3069 |
+| MAE | 0.1922 | 0.1763–0.2064 |
+| R² | 0.5825 | 0.5163–0.6418 |
 
-- Institution-level College Scorecard files
-- Historical annual institution-level files
-- Field-of-study data
-- OPEID/UNITID crosswalk information
-- College Scorecard metadata and documentation
+The bootstrap intervals resample held-out institutions with the trained model fixed; they do not capture model-training or future-cohort uncertainty.
 
-The College Scorecard download page reported that the data were last updated **June 10, 2026** when the project data were acquired.
+### Institutional clusters
 
-Raw data are stored under:
+The unsupervised workflow compared **k-means**, **Gaussian mixture models**, and **Ward agglomerative clustering** after feature preprocessing and PCA. A stable **four-cluster k-means** solution was selected, describing:
 
-```text
-data/raw/
-```
+1. Certificate-focused schools
+2. Four-year teaching colleges
+3. Doctoral universities
+4. Community colleges
 
-The repository stores the large raw CSV files in compressed `.csv.gz` format. Pandas can read these files directly without manually extracting them.
+These groups partially overlap with traditional public, private nonprofit, and private for-profit categories, but are not identical to them. Debt burden was excluded from cluster formation and examined only afterward.
 
-Raw source data should not be modified in place.
+### Supervised–unsupervised integration
 
----
+The integration notebook tested cluster membership, distances to cluster centroids, and PCA-based representations as additional supervised features. Preprocessing and clustering were refitted **within cross-validation training folds** to avoid leakage.
 
-## Unit of Analysis
+Although some integrated variants showed very small improvements in average validation RMSE, **none met the project's predefined improvement criterion**. The final model therefore remained the **supervised-only LightGBM pipeline**. The cluster features appear largely redundant with patterns LightGBM can already learn from the original institutional predictors.
 
-The project uses the **6-digit Office of Postsecondary Education identifier (`OPEID6`)** as the institution-level identifier.
+### Diagnostics and limitations
 
-College Scorecard data may contain multiple `UNITID` records associated with the same OPEID6 because institutions can have multiple branches. These records are therefore consolidated to produce one modeling observation per OPEID6.
+Prediction error was not uniform across institutions. The held-out analysis found larger errors for **private for-profit**, **certificate-focused**, and **smaller-enrollment** institutions. Permutation importance highlighted federal-loan participation, degree-level indicators, and tuition-related features, among others. These are **predictive associations, not causal effects**; demographic feature importance should not be interpreted as a causal claim about student groups.
 
-Institution-level characteristics are aggregated using rules appropriate to each feature, including enrollment-weighted averages, sums, and representative-branch values.
+The outcome and predictions are **institution-level aggregates**, not individual borrower outcomes. Missingness, privacy suppression, historical cohort alignment, and changes in future economic or policy conditions limit generalizability.
 
----
+## Data and Target
 
-## Target Variable
+**Source:** [U.S. Department of Education College Scorecard](https://collegescorecard.ed.gov/data/), using a bulk-data snapshot available during the project (download page updated June 10, 2026).
 
-The primary supervised-learning outcome is an institution-level measure of **student debt burden**:
+The unit of analysis is the **six-digit Office of Postsecondary Education identifier (`OPEID6`)**. Multiple campus records sharing an OPEID6 are consolidated using feature-appropriate aggregation rules, including sums, enrollment-weighted averages, and representative-branch values.
+
+The target is the natural logarithm of the institution-level debt-to-earnings ratio:
 
 ```text
 debt_burden = log(GRAD_DEBT_MDN / MD_EARN_WNE_P10)
 ```
 
-where:
+- `GRAD_DEBT_MDN`: median debt among students who completed their programs.
+- `MD_EARN_WNE_P10`: median earnings of working, non-enrolled students ten years after entry.
 
-- `GRAD_DEBT_MDN` = median cumulative student debt among completers
-- `MD_EARN_WNE_P10` = median earnings of students working and not enrolled 10 years after entry
+Predictors use historical institution characteristics, including sector, enrollment, student composition, aid participation, tuition, cost, admissions, and program offerings. The target components, target itself, and identifier are **excluded from model features**. Fitted transformations are learned on training data only.
 
-The logarithm of the debt-to-earnings ratio is used as the modeling target.
-
-Institutions without the information necessary to construct a valid target are excluded from the final modeling sample.
-
----
-
-## Leakage Prevention
-
-A major design goal of this project is to determine whether debt burden can be predicted using information that would have been available **before the outcome occurred**.
-
-Variables that directly reveal the target are therefore excluded from the predictor matrix.
-
-At minimum, the two variables used to construct the primary outcome are explicitly excluded:
-
-```text
-GRAD_DEBT_MDN
-MD_EARN_WNE_P10
-```
-
-`OPEID6` is retained only as an identifier and is not used as a model predictor.
-
-Learned preprocessing operations such as imputation, scaling, encoding, PCA, and other fitted transformations are performed using training data only to prevent information leakage.
-
----
-
-## Modeling Dataset
-
-The completed data-preparation workflow produces:
-
-- **3,296 institutions**
-- **35 approved predictors**
-- **1 debt-burden target**
-- One observation per `OPEID6`
-
-The predictors include institution-level characteristics and compact field-of-study features covering areas such as:
-
-- Institution type and degree characteristics
-- Enrollment
-- Student demographic composition
-- Part-time enrollment
-- Pell Grant participation
-- Federal loan participation
-- Admissions characteristics
-- Tuition
-- Net price
-- Cost of attendance
-- Program breadth
-- Credential-level offerings
-
-### Train/Test Split
-
-The modeling sample is divided into:
+### Modeling sample
 
 | Dataset | Institutions | Share |
 |---|---:|---:|
 | Training | 2,636 | 80% |
-| Held-out Test | 660 | 20% |
+| Held-out test | 660 | 20% |
 | **Total** | **3,296** | **100%** |
 
-The training set is used for model development, preprocessing, cross-validation, hyperparameter tuning, and supervised/unsupervised integration.
-
-The held-out test set is reserved for final model evaluation and should not be used for model selection.
-
-Processed datasets are stored under:
-
-```text
-data/processed/
-```
-
-including:
-
-```text
-modeling_dataset.csv
-train_dataset.csv
-test_dataset.csv
-```
-
----
-
-## Supervised Learning
-
-The supervised-learning component evaluates whether pre-outcome institutional characteristics can predict later debt burden.
-
-Planned model families include:
-
-- Mean baseline
-- Sector-based baseline
-- Ridge Regression
-- Lasso Regression
-- Elastic Net
-- Random Forest
-- LightGBM
-
-Model development is performed using cross-validation on the training data.
-
-Primary evaluation metrics include:
-
-- **RMSE** - Root Mean Squared Error
-- **MAE** - Mean Absolute Error
-- **R²** - Coefficient of Determination
-
-Model interpretation and diagnostic analyses may include:
-
-- Predicted vs. actual values
-- Residual analysis
-- Feature importance
-- SHAP analysis
-- Learning curves
-- Error analysis across institution types
-
----
-
-## Unsupervised Learning
-
-The unsupervised-learning component investigates whether institutions form meaningful data-driven groups that differ from conventional institution categories.
-
-The planned workflow includes:
-
-1. Preprocessing the institution feature matrix
-2. Principal Component Analysis (PCA)
-3. K-Means clustering
-4. Gaussian Mixture Models
-5. Ward/agglomerative hierarchical clustering
-6. Quantitative comparison of candidate cluster solutions
-7. Cluster stability analysis
-8. Comparison between discovered clusters and existing institution categories
-9. Profiling and interpretation of the resulting institution groups
-
-Candidate cluster structures are evaluated using measures such as:
-
-- Inertia/elbow behavior
-- Silhouette score
-- Davies-Bouldin index
-- Adjusted Rand Index (ARI)
-- Cluster stability
-- Interpretability
-
-Debt burden is **not used to construct the clusters**. It is examined afterward to determine whether the discovered institution groups differ meaningfully in debt burden.
-
----
-
-## Supervised + Unsupervised Integration
-
-After the supervised and unsupervised analyses are developed independently, the project integrates the two approaches.
-
-Useful information discovered through unsupervised learning, such as:
-
-- Cluster membership
-- Distances to cluster centers
-
-may be incorporated into the supervised-learning pipeline.
-
-The project then compares:
-
-```text
-Best Supervised Model
-        vs.
-Best Supervised Model + Unsupervised Features
-```
-
-using the same cross-validation framework.
-
-PCA and clustering used to generate model features must be fitted within the corresponding training folds to avoid leakage.
-
-This analysis tests whether the institutional structure discovered through unsupervised learning contains predictive information beyond the original institutional characteristics.
-
----
+The held-out test set was reserved for the final frozen-model evaluation, not model selection.
 
 ## Repository Structure
 
 ```text
 College-Debt-Burden-Prediction/
-│
 ├── data/
-│   ├── raw/
-│   │   └── College_Scorecard_Raw_Data_06032026/
+│   ├── raw/                         # College Scorecard bulk download (local source files)
 │   └── processed/
 │       ├── modeling_dataset.csv
 │       ├── train_dataset.csv
 │       └── test_dataset.csv
-│
 ├── figures/
-│
+│   ├── 01_data_preparation/
+│   ├── 02_supervised/
+│   ├── 03_unsupervised/
+│   ├── 04_integration/              # Generated by integration notebook
+│   └── 05_final_evaluation/
 ├── notebooks/
 │   ├── 01_data_preparation.ipynb
 │   ├── 02_supervised_learning.ipynb
 │   ├── 03_unsupervised_learning.ipynb
 │   ├── 04_integration.ipynb
 │   └── 05_final_evaluation.ipynb
-│
 ├── results/
-│
+│   ├── 02_supervised/
+│   ├── 03_unsupervised/
+│   ├── 04_integration/
+│   └── 05_final_evaluation/
 ├── src/
-│
+│   ├── __init__.py
+│   ├── integration.py
+│   └── unsupervised.py
 ├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
 
-Some directories and later notebooks may be populated as the project progresses.
-
----
+Generated artifacts include model-comparison tables, clustering diagnostics, integration decisions, held-out predictions, subgroup metrics, bootstrap intervals, and figures. Some generated files or raw data may be excluded from Git tracking; check `.gitignore` and the repository contents.
 
 ## Notebook Workflow
 
-### `01_data_preparation.ipynb`
+| Notebook | Purpose |
+|---|---|
+| **01 — Data Preparation** | Read and document College Scorecard files, construct the target, aggregate by OPEID6, build features, and freeze the train/test split. |
+| **02 — Supervised Learning** | Compare baselines and regression models, tune hyperparameters, select LightGBM, and analyze training-fold diagnostics. |
+| **03 — Unsupervised Learning** | Preprocess training-only features, perform PCA, compare clustering algorithms, assess stability, and profile institution types. |
+| **04 — Integration** | Evaluate leakage-safe cluster-derived features within supervised cross-validation and decide whether to adopt them. |
+| **05 — Final Evaluation** | Evaluate the frozen selected model once on the held-out test set, examine subgroup errors and failure cases, and estimate bootstrap uncertainty. |
 
-Creates the common modeling dataset used throughout the project.
+## Setup and Reproduction
 
-Major tasks include:
+1. Clone this repository and open it in a Python/Jupyter environment.
+2. Install dependencies:
 
-- Inventorying and documenting the College Scorecard source files
-- Inspecting relevant data schemas
-- Verifying target-variable definitions
-- Constructing the debt-burden target
-- Establishing OPEID6 as the unit of analysis
-- Selecting historical pre-outcome predictors
-- Aggregating branch-level institution records
-- Constructing field-of-study features
-- Identifying target leakage
-- Examining missingness
-- Performing initial exploratory data analysis
-- Establishing the 80/20 train/test split
-- Saving and validating the processed datasets
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-**Output:** common modeling, training, and held-out test datasets.
+3. Obtain the College Scorecard bulk data from the source above. For complete regeneration from raw files, place the extracted files under the raw-data directory expected by `01_data_preparation.ipynb`:
 
-### `02_supervised_learning.ipynb`
+   ```text
+   data/raw/College_Scorecard_Raw_Data_06032026/
+   ```
 
-Develops and compares supervised regression models.
+4. Open Jupyter from the `notebooks/` directory (the notebooks use `Path("..")` to locate the project root).
+5. Execute notebooks in order: **01 → 02 and 03 → 04 → 05**. Notebooks 02 and 03 can run independently after Notebook 01.
 
-Major tasks include:
+If you only need to inspect the prepared data and saved results, start with `data/processed/`, `results/`, and `figures/`. Reproducing the entire analysis requires compatible package versions and access to the raw source files.
 
-- Baseline models
-- Cross-validation
-- Training-data preprocessing
-- Regularized linear models
-- Random Forest
-- LightGBM
-- Hyperparameter tuning
-- Model comparison
-- Feature interpretation
-- Learning curves
+## Tools
 
-**Output:** selected supervised-learning pipeline and cross-validation results.
+Python, pandas, NumPy, scikit-learn, LightGBM, SciPy, Matplotlib, seaborn, SHAP, PCA, k-means, Gaussian mixtures, Ward clustering, Jupyter, and Git/GitHub.
 
-### `03_unsupervised_learning.ipynb`
+## Interpretation
 
-Examines the structure of institutions without using debt burden to form the groups.
-
-Major tasks include:
-
-- Unsupervised preprocessing
-- PCA
-- K-Means
-- Gaussian Mixture Models
-- Ward/hierarchical clustering
-- Cluster evaluation
-- Stability analysis
-- Cluster profiling
-- Unsupervised visualizations
-
-**Output:** selected institution clustering/representation and potential cluster-derived features.
-
-### `04_integration.ipynb`
-
-Connects the supervised and unsupervised analyses.
-
-The notebook tests whether institution structure discovered through unsupervised learning improves debt-burden prediction.
-
-**Output:** comparison of the best supervised model with and without unsupervised-derived features.
-
-### `05_final_evaluation.ipynb`
-
-Performs final evaluation after the modeling decisions have been made using training-data cross-validation.
-
-Major tasks include:
-
-- Final evaluation on the held-out test set
-- Final model comparisons
-- Sensitivity and robustness analyses
-- Examination of model failures
-- Production of final tables and figures
-
-**Output:** final project results used for interpretation and reporting.
+This project is a predictive and exploratory analysis, **not a causal study**. Its findings should not be used to infer the debt burden of a particular student or to attribute institutional outcomes to any individual demographic characteristic.
 
 ---
 
-## Installation
-
-Clone the repository and install the required Python packages:
-
-```bash
-pip install -r requirements.txt
-```
-
-The project uses Python and Jupyter notebooks.
-
-Core dependencies include:
-
-- NumPy
-- pandas
-- scikit-learn
-- Matplotlib
-- seaborn
-- LightGBM
-- SHAP
-- Jupyter
-
-Additional dependencies may be added as the modeling notebooks are developed.
-
----
-
-## Reproducing the Analysis
-
-The notebooks are intended to be run in numerical order:
-
-```text
-01_data_preparation.ipynb
-        ↓
-02_supervised_learning.ipynb
-03_unsupervised_learning.ipynb
-        ↓
-04_integration.ipynb
-        ↓
-05_final_evaluation.ipynb
-```
-
-Notebooks 2 and 3 can be developed in parallel after Notebook 1 has produced the common modeling dataset.
-
-For reproducibility:
-
-1. Clone the repository.
-2. Install the packages listed in `requirements.txt`.
-3. Confirm that the College Scorecard raw data are available under `data/raw/`.
-4. Run `01_data_preparation.ipynb` to reproduce the processed datasets.
-5. Run the supervised and unsupervised notebooks.
-6. Run the integration notebook after the supervised and unsupervised approaches have been selected.
-7. Run the final-evaluation notebook last.
-
-The held-out test data should remain untouched during model development.
-
----
-
-## Data and Project Limitations
-
-The analysis is conducted at the **institution level**, not the individual student level.
-
-Accordingly, the results should not be interpreted as predictions about individual borrowers.
-
-Additional limitations include:
-
-- College Scorecard outcomes represent institution-level aggregates.
-- Some observations are privacy-suppressed.
-- Missingness may be systematic rather than random.
-- Debt and earnings measures may represent pooled cohorts.
-- Historical relationships may not generalize to future policy environments or future student cohorts.
-- Institutional characteristics may describe associations with debt burden without establishing causal effects.
-
----
-
-## Technologies
-
-The project primarily uses:
-
-- **Python**
-- **pandas**
-- **NumPy**
-- **scikit-learn**
-- **Matplotlib**
-- **seaborn**
-- **LightGBM**
-- **SHAP**
-- **Jupyter Notebook**
-- **Git / GitHub**
-
----
-
-## Course
-
-This project was developed for **SIADS 696 - Milestone II** in the University of Michigan Master of Applied Data Science program.
+*Developed for SIADS 696 — Milestone II, University of Michigan Master of Applied Data Science program.*
