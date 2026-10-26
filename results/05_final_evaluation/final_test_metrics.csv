@@ -1,0 +1,2 @@
+model,n_test,rmse,mae,r2
+LightGBM (supervised only),660,0.2808555891356342,0.19223704996463106,0.582526579637126

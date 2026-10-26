@@ -1,0 +1,10 @@
+{
+    "selected_model": "LightGBM (supervised only)",
+    "selection_basis": "Training-set cross-validation",
+    "cv_rmse_mean": 0.2722982959754563,
+    "cv_rmse_std": 0.0097661180584321,
+    "cv_mae_mean": 0.1984444746258072,
+    "cv_r2_mean": 0.5827516151911734,
+    "integration_improvement_rule_passed": false,
+    "test_set_used_for_selection": false
+}
