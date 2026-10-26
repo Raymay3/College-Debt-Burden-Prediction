@@ -112,10 +112,12 @@ College-Debt-Burden-Prediction/
 │   ├── 02_supervised/
 │   ├── 03_unsupervised/
 │   ├── 04_integration/
-│   └── 05_final_evaluation/
+│   ├── 05_final_evaluation/
+│   └── report_tables.md         # Report-ready tables built from the results
 ├── src/
 │   ├── __init__.py
 │   ├── integration.py
+│   ├── report_tables.py         # python -m src.report_tables
 │   └── unsupervised.py
 ├── .gitignore
 ├── requirements.txt
