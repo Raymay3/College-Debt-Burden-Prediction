@@ -1,0 +1,5 @@
+﻿Target definition,Mean baseline,Sector × degree baseline,Lasso,LightGBM
+Completer debt ÷ 10-yr earnings (main),-0.001,0.251,0.527,0.583
+Annual payment ÷ 10-yr earnings (proposal),-0.001,0.251,0.527,0.583
+All-borrower debt ÷ 10-yr earnings,-0.003,0.370,0.513,0.573
+Completer debt ÷ 6-yr earnings,-0.002,0.282,0.522,0.592

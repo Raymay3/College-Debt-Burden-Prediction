@@ -1,0 +1,7 @@
+﻿Predictor group,Features,Examples,Preprocessing
+Institutional structure,5,"CONTROL, REGION, PREDDEG, HIGHDEG, …",Codes one-hot encoded for linear models (integer codes for trees); NUMBRANCH log(1 + x)
+Enrollment and student composition,11,"UGDS, UGDS_WHITE, UGDS_BLACK, UGDS_HISP, …",UGDS log(1 + x); shares used as-is; median imputation + missing indicators; standardized for linear models
+Financial-aid participation,2,"PCTPELL, PCTFLOAN",Shares used as-is; median imputation + missing indicators; standardized for linear models
+Admissions and selectivity,2,"ADM_RATE, SAT_AVG",Median imputation + missing indicators (53–65% missing); standardized for linear models
+Price and cost,5,"TUITIONFEE_IN, TUITIONFEE_OUT, NET_PRICE, COST_OF_ATTENDANCE, …",Dollar amounts log(1 + x); median imputation + missing indicators; standardized for linear models
+Program and credential mix,10,"NUM_PROGRAMS, NUM_CREDENTIAL_LEVELS, HAS_CERTIFICATE, HAS_ASSOCIATE, …",NUM_PROGRAMS log(1 + x); 0/1 indicators used as-is; standardized for linear models

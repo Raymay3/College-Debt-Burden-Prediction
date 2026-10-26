@@ -1,0 +1,4 @@
+﻿Method,k,Silhouette,Davies–Bouldin,Bootstrap ARI,ARI vs. sector,Interpretation
+k-means,4,0.283,1.531,0.965,0.384,"Selected: four balanced, nameable types; highest silhouette and stability"
+GMM,4,0.240,2.523,0.702,0.322,Weakest separation and least stable; clusters change across resamples
+Ward,4,0.256,1.709,0.737,0.323,Close to k-means on silhouette but less stable; tiny cluster appears from k = 6

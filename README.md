@@ -113,7 +113,7 @@ College-Debt-Burden-Prediction/
 │   ├── 03_unsupervised/
 │   ├── 04_integration/
 │   ├── 05_final_evaluation/
-│   └── report_tables.md         # Report-ready tables built from the results
+│   └── report_tables/           # Report tables as CSVs (built from the results)
 ├── src/
 │   ├── __init__.py
 │   ├── integration.py

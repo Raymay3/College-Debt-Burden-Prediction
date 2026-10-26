@@ -1,0 +1,10 @@
+﻿Variant,Dimensions,ARI vs. selected,ARI vs. sector,Burden η²
+Selected (PCA 85%),13,1.000,0.384,0.236
+PCA 80%,11,0.983,0.383,0.240
+PCA 90%,16,0.997,0.385,0.235
+PCA 95%,19,0.982,0.383,0.235
+No reduction (all components),30,0.974,0.381,0.239
+Without demographics,8,0.968,0.382,0.234
+Without program mix and degree level,10,0.536,0.405,0.231
+Without price and cost,12,0.844,0.382,0.223
+Without financial aid,13,0.932,0.368,0.212
