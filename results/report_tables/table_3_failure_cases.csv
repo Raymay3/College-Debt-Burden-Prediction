@@ -1,5 +1,0 @@
-﻿OPEID6,Sector / degree,Enrollment,Actual ratio,Predicted ratio,Direction,Possible explanation
-1955,"Private nonprofit, Bachelor's","1,577",0.083,0.354,Overprediction,"Net price of $3,067 and 28% loan participation despite $24,270 tuition; 84% Pell share"
-22092,"Private for-profit, Certificate",172,1.245,0.303,Underprediction,Single-program school with 172 students: small-cohort noise in median debt and earnings
-41831,"Private for-profit, Certificate",81,1.632,0.463,Underprediction,Single-program school with 81 students: small-cohort noise in median debt and earnings
-5618,"Public, Certificate","4,223",0.099,0.284,Overprediction,"Low-tuition public institution ($2,644); burden far below what its profile suggests"

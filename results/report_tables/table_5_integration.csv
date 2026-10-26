@@ -1,7 +1,0 @@
-﻿Feature representation,CV RMSE (mean ± SD),ΔRMSE (mean ± SD),Folds improved,Criterion met?
-Original supervised features,0.2723 ± 0.0098,—,—,—
-+ clusters (k = 4),0.2718 ± 0.0089,-0.0005 ± 0.0022,4 of 5,No
-+ cluster membership,0.2721 ± 0.0092,-0.0002 ± 0.0007,3 of 5,No
-+ centroid distances,0.2715 ± 0.0093,-0.0008 ± 0.0023,4 of 5,No
-+ PCA scores,0.2718 ± 0.0079,-0.0005 ± 0.0045,3 of 5,No
-"+ clusters (k = 4), repeated CV (25 folds)",0.2714 ± 0.0104,-0.0001 ± 0.0016,11 of 25,No

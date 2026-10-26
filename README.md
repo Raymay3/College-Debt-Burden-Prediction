@@ -112,12 +112,10 @@ College-Debt-Burden-Prediction/
 │   ├── 02_supervised/
 │   ├── 03_unsupervised/
 │   ├── 04_integration/
-│   ├── 05_final_evaluation/
-│   └── report_tables/           # Report tables as CSVs (built from the results)
+│   └── 05_final_evaluation/
 ├── src/
 │   ├── __init__.py
 │   ├── integration.py
-│   ├── report_tables.py         # python -m src.report_tables
 │   └── unsupervised.py
 ├── .gitignore
 ├── requirements.txt

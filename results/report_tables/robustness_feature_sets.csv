@@ -1,5 +1,0 @@
-﻿Feature set,CV RMSE,R²,ΔRMSE
-All features,0.2723,0.583,+0.0000
-"Without ADM_RATE, SAT_AVG",0.2738,0.578,+0.0015
-Without CONTROL,0.2747,0.575,+0.0024
-Without PCTFLOAN,0.2762,0.571,+0.0039

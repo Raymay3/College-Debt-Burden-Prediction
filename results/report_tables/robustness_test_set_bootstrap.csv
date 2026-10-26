@@ -1,4 +1,0 @@
-﻿Metric,Held-out estimate,95% bootstrap CI
-RMSE,0.281,0.253–0.307
-MAE,0.192,0.176–0.206
-R²,0.583,0.516–0.642

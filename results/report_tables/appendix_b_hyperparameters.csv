@@ -1,6 +1,0 @@
-﻿Model,Search space,Final hyperparameters (full training set)
-Ridge,"Grid: alpha = 26 values log-spaced from 0.01 to 1,000",alpha = 25.12
-Lasso,Grid: alpha = 22 values log-spaced from 0.0001 to 0.316,alpha = 0.001
-Elastic Net,"Grid: alpha = 17 values log-spaced from 0.0001 to 1; l1_ratio ∈ {0.1, 0.3, 0.5, 0.7, 0.9}",alpha = 0.001; l1_ratio = 0.9
-Random Forest,"Random search (20 draws), 300 trees: max_features ∈ {0.2, 0.33, 0.5, 0.75, 1.0}; min_samples_leaf ∈ {1, 2, 4, 8, 16}; max_depth ∈ {None, 10, 20}",min_samples_leaf = 2; max_features = 0.33; max_depth = 20
-LightGBM,"Random search (40 draws): n_estimators 200–1,499; learning_rate 0.005–0.1 (log-uniform); num_leaves 4–47; min_child_samples 10–79; subsample 0.5–1.0; colsample_bytree 0.3–1.0; reg_lambda 0.001–30 (log-uniform)",colsample_bytree = 0.4306; learning_rate = 0.00565; min_child_samples = 29; n_estimators = 963; num_leaves = 39; reg_lambda = 0.001186; subsample = 0.756
