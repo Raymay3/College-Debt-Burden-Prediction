@@ -13,7 +13,5 @@ __pycache__/
 .venv/
 venv/
 
-# Local planning documents (not part of the repo)
-/Timeline.pdf
-/SIADS 696 - Milestone II_ Team Project Proposal Final.pdf
-/Project Report.pdf
+# Personal course materials and planning documents (never pushed)
+/Personal/
