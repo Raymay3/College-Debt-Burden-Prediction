@@ -4,6 +4,8 @@
 
 **Team 15:** Dominick Devarti · Gabriella Gass · Vamsi Krishna Ramesh
 
+**Final Report:** [SIADS 696 Milestone II Project Report](https://github.com/Raymay3/College-Debt-Burden-Prediction/blob/main/Final%20Report.pdf)
+
 ## Project Overview
 
 Can historical characteristics of U.S. colleges predict student debt burden? And can unsupervised learning identify institution types that provide additional predictive information?
@@ -117,6 +119,7 @@ College-Debt-Burden-Prediction/
 │   ├── __init__.py
 │   ├── integration.py
 │   └── unsupervised.py
+├── Final Report.pdf
 ├── .gitignore
 ├── requirements.txt
 └── README.md
